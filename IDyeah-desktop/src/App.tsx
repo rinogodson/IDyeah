@@ -1,10 +1,12 @@
 import React from 'react'
-import './App.css'
+import FunctionPage from './Pages/FunctionPage/FunctionPage';
 
 function App() {
   return (
-    <div>App</div>
-  )
+    <>
+      <FunctionPage />
+    </>
+  );
 }
 
 export default App
