@@ -21,24 +21,29 @@ function FunctionPage() {
         >
           <div className="rounded-full w-full aspect-square input"></div>
           <div className="inputCont">
-            <div className="input" style={{ gridArea: "1 / 1 / 2 / 4" }}>
-              <p className="p-0 m-0">Name</p>
-              <input type="text" className="text-[30px] text-white" />
-            </div>
-            <div className="input" style={{ gridArea: "2 / 1 / 3 / 2" }}>
-              <p className="p-0 m-0">Adm. no.</p>
-              <input type="text" className="text-[30px] w-full text-white" />
-            </div>
-            <div className="input" style={{ gridArea: "2 / 2 / 3 / 4" }}>
-              <p className="p-0 m-0">Ph. no.</p>
-              <input type="text" className="text-[30px] text-white" />
-            </div>
+            <InputComponent label="Name" gridarea="1/1/2/4" />
+            <InputComponent label="Adm. no." gridarea="2/1/3/2" />
+            <InputComponent label="Ph. no." gridarea="2 / 2 / 3 / 4" />
           </div>
         </div>
       </div>
-      <div className="block-style"></div>
+      <div className="grid grid-cols-2 grid-rows-1 block-style">
+        <div className='grid grid-rows-[1fr_3fr] gap-[2em] h-full'>
+          <InputComponent label="Guardian" gridarea="" />
+          <InputComponent label="Address" gridarea="" />
+        </div>
+      </div>
     </div>
   );
 }
 
 export default FunctionPage
+
+function InputComponent({label, gridarea}: {label: string; gridarea: string;}){
+  return (
+    <div className="input" style={{ gridArea: gridarea }}>
+      <p className="p-0 m-0">{label}</p>
+      <input type="text" className="text-[30px] w-full text-white flex items-start justify-start" />
+    </div>
+  );
+}

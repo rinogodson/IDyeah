@@ -4,7 +4,7 @@
     .block-style {
         border-radius: calc(50px - 1.25rem);
         border: 2px solid rgba(255, 255, 255, 0.25);
-        background: rgba(46, 46, 46, 0.10);
+        background: rgba(0, 0, 0, 0.00);
         backdrop-filter: blur(50px);
         display: grid;
         gap: 25px;
@@ -12,6 +12,7 @@
         padding: 25px;
         place-content: center;
     }
+
     .input {
         border-radius: 10px;
         border: 1px solid rgba(255, 255, 255, 0.25);
@@ -23,7 +24,9 @@
         color: rgba(255, 255, 255, 0.4);
         padding-inline: 5px;
         display: grid;
+        grid-template-rows: 2em 1fr;
     }
+
     .inputCont {
         display: grid;
         gap: 2em;
