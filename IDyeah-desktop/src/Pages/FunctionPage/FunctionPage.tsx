@@ -1,7 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from '../../Components/Button/Button';
+import { useForm } from '../../App';
 
 function FunctionPage() {
+  const {form, setForm} = useForm();
+
+  useEffect(()=>{
+    console.log(form);
+    
+  }, [form])
+
+// procedural function for the form fields 
+const createFormFunction = (fieldName: string) => {
+  return (value: string) => {
+    setForm((prevForm: any) => ({
+      ...prevForm,
+      [fieldName]: value,
+    }));
+  };
+}; 
+
   return (
     // This is the base component
     <div className="grid grid-cols-1 grid-rows-[1fr_4fr] h-[50em] w-[60em] bg-[rgba(0,0,0,0.65)] backdrop-blur-[50px] border-[4px] border-[rgba(255,255,255,0.20)] p-5 gap-[1.25rem] rounded-[50px]">
@@ -27,58 +45,87 @@ function FunctionPage() {
         >
           <div className="rounded-full w-full aspect-square input"></div>
           <div className="inputCont">
-            <InputComponent label="Name" gridarea="1/1/2/4" textArea={false} />
+            <InputComponent
+              label="Name"
+              gridarea="1/1/2/4"
+              textArea={false}
+              value={form.name}
+              setValue={createFormFunction('name')}
+            />
             <InputComponent
               label="Adm. no."
               gridarea="2/1/3/2"
               textArea={false}
+              value={form.adm}
+              setValue={createFormFunction('adm')}
             />
             <InputComponent
               label="Ph. no."
               gridarea="2 / 2 / 3 / 4"
               textArea={false}
+              value={form.ph}
+              setValue={createFormFunction('ph')}
             />
           </div>
         </div>
       </div>
 
       {/* This is the Bottom Part of the container */}
-      <div className="grid grid-cols-2 grid-rows-1 block-style">
-        <div className="grid grid-rows-[1fr_3fr] gap-[2em] h-full">
-          <InputComponent label="Guardian" gridarea="" textArea={false} />
-          <InputComponent label="Address" gridarea="" textArea={true} />
+      <div className="grid grid-cols-[1fr_2px_1fr] grid-rows-1 block-style">
+        <div className="grid grid-rows-[1fr_3fr_2em] gap-[2em] h-full">
+          <InputComponent label="Guardian" gridarea="1 / 1 / 2 / 2" textArea={false} value={form.guardian} setValue={(value: string)=>{
+            setForm({ ...form, guardian: value });
+          }}/>
+          <InputComponent label="Address" gridarea="2 / 1 / 4 / 2" textArea={true} 
+          value={form.address}
+          setValue={createFormFunction('address')}
+          />
         </div>
+
+        <div className='w-[2px] h-full bg-[rgba(255,255,255,0.1)] rounded-2xl'>
+        </div>
+
         <div className="grid grid-rows-4 gap-[2em] h-full grid-cols-4">
           <InputComponent
             label="D.O.B."
             gridarea="1 / 1 / 2 / 4"
             textArea={false}
+            value={form.dob}
+            setValue={createFormFunction('dob')}
           />
           <InputComponent
             label="Blood"
             gridarea="1 / 4 / 2 / 6"
             textArea={false}
+            value={form.blood}
+            setValue={createFormFunction('blood')}
           />
           <InputComponent
             label="Boarding Point"
             gridarea="2 / 1 / 3 / 6"
             textArea={false}
+            value={form.bp}
+            setValue={createFormFunction('bp')}
           />
           <InputComponent
             label="Bus no."
             gridarea="3 / 1 / 4 / 3"
             textArea={false}
+            value={form.bus}
+            setValue={createFormFunction('bus')}
           />
           <InputComponent
             label="Club"
             gridarea="3 / 3 / 4 / 6"
             textArea={false}
+            value={form.club}
+            setValue={createFormFunction('club')}
           />
           <div
             className="grid grid-cols-2 grid-rows-1 gap-8 items-end"
             style={{ gridArea: "4 / 1 / 5 / 6" }}
           >
-            <button className="w-32 h-fit p-1 opacity-50 bg-gradient-to-br from-white/20 to-white/0 rounded-[100px] text-white justify-self-center">
+            <button className="duration-300 w-32 h-fit p-1 opacity-50 hover:opacity-100 active:opacity-70 bg-gradient-to-br from-white/20 to-white/0 rounded-[100px] text-white justify-self-center">
               CLEAR
             </button>
             <Button label="SUBMIT" />
@@ -91,20 +138,34 @@ function FunctionPage() {
 
 export default FunctionPage
 
-function InputComponent({label, gridarea, textArea}: {label: string; gridarea: string; textArea: boolean;}){
+function InputComponent({label, gridarea, textArea, value, setValue}: {label: string; gridarea: string; textArea: boolean; value: any; setValue: Function;}){
+  const [focused, setFocused] = React.useState(false);
+  
   return (
-    <div className="input" style={{ gridArea: gridarea }}>
+    <div className={`input`} style={{ gridArea: gridarea, borderColor: focused ? "white" : "#ffffff40", scale: focused ? 1.05 : 1, }}>
       <p className="p-0 m-0">{label}</p>
       {textArea ? (
         <textarea
           name="textarea"
           id="txt"
+          value={value}
+          onFocus={()=>setFocused(!focused)}
+          onBlur={()=>setFocused(!focused)}
+          onChange={(e)=>{
+            setValue(e.target.value);
+          }}
           className="text-[30px] w-full text-white flex items-start justify-start"
         ></textarea>
       ) : (
         <input
           type="text"
-          className="text-[30px] w-full text-white flex items-start justify-start"
+          value={value}
+          onFocus={()=>setFocused(!focused)}
+          onBlur={()=>setFocused(!focused)}
+          onChange={(e)=>{
+            setValue(e.target.value);
+          }}
+          className="input-inside-input text-[30px] w-full text-white flex items-start justify-center px-1"
         />
       )}
     </div>
