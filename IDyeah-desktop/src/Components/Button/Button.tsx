@@ -8,4 +8,4 @@ function Button({label}:{label:string;}) {
   )
 }
 
-export default Button
+export default Button;

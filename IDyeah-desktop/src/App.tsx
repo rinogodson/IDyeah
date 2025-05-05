@@ -1,11 +1,23 @@
 import React, { Children } from 'react'
 import FunctionPage from './Pages/FunctionPage/FunctionPage';
 import { useContext, createContext } from 'react';
+import CameraPreview from './Components/CameraPreview/CameraPreview';
+import ButtonList from './Components/ButtonList/ButtonList';
+import WallChange from './Components/WallChange/WallChange';
 
 function App() {
   return (
     <FormProvider>
-      <FunctionPage />
+      <div>
+        <div className="flex gap-6">
+          <FunctionPage />
+          <div className="flex flex-col gap-6">
+            <CameraPreview />
+            <ButtonList />
+          </div>
+        </div>
+        <WallChange />
+      </div>
     </FormProvider>
   );
 }
