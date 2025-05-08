@@ -12,6 +12,8 @@ function FunctionPage() {
     
   }, [form])
 
+
+
 // procedural function for the form fields 
 const createFormFunction = (fieldName: string) => {
   return (value: string) => {

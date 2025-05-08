@@ -1,5 +1,11 @@
 package main
 
+	// CRUD Operations
+	// C - Create done
+	// R - Read
+	// U - Update done
+	// D - Delete
+
 import (
 	"log"
 
@@ -32,16 +38,17 @@ func main() {
 
 	err = db.AutoMigrate(&Student{})
 	if err != nil {
-		log.Fatal("Migration Failed: ", err)
+		log.Fatal("⚠️Failed to Migrate the Database: ", err)
 	}
 
 	app := fiber.New()
 
 	app.Get("/", func(c fiber.Ctx) error {
-		return c.SendString("Hello World, this is a test backend for IDyeah.")
+		return c.SendString("Pong! this is the backend for IDyeah")
 	})
 
-	app.Post("/add", func(c fiber.Ctx) error {
+	// Create
+	app.Post("/create", func(c fiber.Ctx) error {
 		var s Student
 		if err := c.Bind().JSON(&s); err != nil {
 			return c.Status(fiber.StatusBadRequest).SendString("Failed to parse body" + err.Error())
@@ -50,23 +57,53 @@ func main() {
 		return c.SendString("Value Added to the DB!")
 	})
 
-	app.Post("/edit", func(c fiber.Ctx) error {
-		type ReqType struct {
+	// Update
+	app.Post("/update", func(c fiber.Ctx) error {
+		var s struct {
 			From int64   `json:"from"`
 			To   Student `json:"to"`
 		}
-		var s ReqType
+
 		if err := c.Bind().JSON(&s); err != nil {
 			return c.Status(fiber.StatusBadRequest).SendString("Check the format")
 		}
 		var val Student
 		db.First(&val, s.From)
-		db.Model(&s).Update("name", s.To.Name)
+		db.Model(&val).Update("name", s.To.Name)
+		db.Model(&val).Update("adm", s.To.AdmNo)
+		db.Model(&val).Update("ph", s.To.PhNo)
+		db.Model(&val).Update("guardian", s.To.Guardian)
+		db.Model(&val).Update("address", s.To.Address)
+		db.Model(&val).Update("dob", s.To.Dob)
+		db.Model(&val).Update("blood", s.To.Blood)
+		db.Model(&val).Update("boarding", s.To.Boarding)
+		db.Model(&val).Update("bus", s.To.Bus)
+		db.Model(&val).Update("club", s.To.Club)
 		return c.SendString("Changes Made")
 	})
 
-	app.Get("/api/", func(c fiber.Ctx) error {
-		return c.SendString("This is a test API Request")
+	// Delete
+	app.Post("/delete", func(c fiber.Ctx) error {
+		var r struct {
+			Id int64 `json:"id"`
+		}
+
+		if err := c.Bind().JSON(&r); err != nil {
+			return c.Status(fiber.StatusBadRequest).SendString("Check the format")
+		}
+
+		var val Student
+		db.First(&val, r.Id)
+		db.Delete(&val)
+		return c.SendString("Deleted")
 	})
+
+	// Read
+	app.Get("/read", func(c fiber.Ctx) error {
+		var s []Student
+		db.Find(&s)
+		return c.JSON(s)
+	})
+
 	log.Fatal(app.Listen(":3000"))
 }
